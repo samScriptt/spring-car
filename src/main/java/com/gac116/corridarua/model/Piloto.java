@@ -20,18 +20,19 @@ public class Piloto {
 
     // Relacionamento N:1 com Equipe
     @ManyToOne
-    @JoinColumn(name = "equipe_id") // Chave estrangeira
-    private Equipe equipe; // <-- Símbolo Equipe corrigido pela importação/criação da classe Equipe
+    @JoinColumn(name = "equipe_id")
+    private Equipe equipe;
+
+    // --- CAMPOS DE LOGIN ---
+    @Column(unique = true)
+    private String username;
+    
+    private String password; // Senha criptografada
 
     // Construtor vazio (necessário para JPA)
     public Piloto() {}
 
-    @Column(unique = true)
-private String username;
-private String password; // Senha criptografada
-
-    // Construtor, Getters and Setters (omiti para brevidade, mas devem ser incluídos)
-    // ...
+    // --- GETTERS E SETTERS ---
     
     public Long getId() {
         return id;
@@ -65,11 +66,29 @@ private String password; // Senha criptografada
         this.categoria = categoria;
     }
 
-    public Equipe getEquipe() { // <-- Símbolo Equipe corrigido
+    public Equipe getEquipe() {
         return equipe;
     }
 
-    public void setEquipe(Equipe equipe) { // <-- Símbolo Equipe corrigido
+    public void setEquipe(Equipe equipe) {
         this.equipe = equipe;
+    }
+
+    // --- MÉTODOS QUE FALTAVAM E CAUSAVAM O ERRO ---
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
