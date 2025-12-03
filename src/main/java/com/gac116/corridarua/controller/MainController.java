@@ -39,4 +39,42 @@ public class MainController {
     public String login() {
         return "login"; // Assume um template login.html
     }
+
+    @Autowired
+    private PilotoRepository pilotoRepository;
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
+    @GetMapping("/registro")
+    public String registroForm(Model model) {
+        model.addAttribute("registroDto", new com.gac116.corridarua.dto.RegistroDTO());
+        model.addAttribute("equipes", equipeRepository.findAll());
+        return "registro";
+    }
+
+    @PostMapping("/registro")
+    public String registrarPiloto(@ModelAttribute com.gac116.corridarua.dto.RegistroDTO dto) {
+        // 1. Criar ou buscar Equipe (Lógica simplificada)
+        Equipe equipe = null;
+        if (dto.getEquipeId() != null) {
+            equipe = equipeRepository.findById(dto.getEquipeId()).orElse(null);
+        } else if (dto.getNovaEquipeNome() != null && !dto.getNovaEquipeNome().isEmpty()) {
+            equipe = new Equipe();
+            equipe.setNome(dto.getNovaEquipeNome());
+            equipe.setCidade(dto.getNovaEquipeCidade());
+            equipeRepository.save(equipe);
+        }
+
+        // 2. Criar Piloto
+        Piloto novoPiloto = new Piloto();
+        novoPiloto.setNome(dto.getNomePiloto());
+        novoPiloto.setUsername(dto.getUsername());
+        // Criptografar senha antes de salvar!
+        novoPiloto.setPassword(passwordEncoder.encode(dto.getPassword())); 
+        novoPiloto.setEquipe(equipe);
+        
+        pilotoRepository.save(novoPiloto);
+
+        return "redirect:/login?registrado=true";
+    }
 }

@@ -26,6 +26,10 @@ public class Piloto {
     // Construtor vazio (necessário para JPA)
     public Piloto() {}
 
+    @Column(unique = true)
+private String username;
+private String password; // Senha criptografada
+
     // Construtor, Getters and Setters (omiti para brevidade, mas devem ser incluídos)
     // ...
     

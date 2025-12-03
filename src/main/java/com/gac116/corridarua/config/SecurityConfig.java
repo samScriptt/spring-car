@@ -45,8 +45,10 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    @Bean
+    public org.springframework.security.crypto.password.PasswordEncoder passwordEncoder() {
+        return new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
+    }
     
-    // Você precisará de um PasswordEncoder e um UserDetailsService aqui também
-    // para que a segurança funcione completamente, mas para o erro de compilação, 
-    // o foco é no filterChain.
 }
