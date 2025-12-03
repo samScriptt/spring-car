@@ -1,0 +1,41 @@
+Maven
+
+target/
+pom.xml.tag
+pom.xml.bak
+release.properties
+release.versions
+dependency-reduced-pom.xml
+build/
+.settings/
+.project
+.classpath
+
+IntelliJ / VS Code
+
+.idea/
+.vscode/
+*.iml
+
+Spring Boot
+
+!/src/main//resources/
+!/src/main//webapp/
+!/src/main//java/
+!/src/test//resources/
+!/src/test//java/
+
+Arquivos de log e cache
+
+*.log
+log/
+tmp/
+
+Banco de dados SQLite local
+
+*.sqlite
+*.sqlite3
+
+Variáveis de ambiente
+
+.env

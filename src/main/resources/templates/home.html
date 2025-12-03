@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Corrida Spring</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+<body class="container">
+    <nav>
+        <ul><li><strong>Corrida Rua (Java Edition)</strong></li></ul>
+        <ul>
+            <li sec:authorize="!isAuthenticated()">
+                <a th:href="@{/login}">Entrar</a>
+            </li>
+            <li sec:authorize="!isAuthenticated()">
+                <a th:href="@{/registro}">Registrar</a>
+            </li>
+            
+            <li sec:authorize="isAuthenticated()">
+                Olá, <span sec:authentication="name">Usuário</span>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit">Sair</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+    <h1>Bem-vindo ao Sistema em Spring Boot!</h1>
+</body>
+</html>

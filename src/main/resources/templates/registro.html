@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+<body class="container">
+    <h2>Registro de Piloto</h2>
+    <form th:action="@{/registro}" th:object="${registroDto}" method="post">
+        
+        <label>Usuário: <input type="text" th:field="*{username}" required /></label>
+        <label>Senha: <input type="password" th:field="*{password}" required /></label>
+        <label>Nome Piloto: <input type="text" th:field="*{nomePiloto}" required /></label>
+        
+        <hr>
+        <label>Escolher Equipe Existente:</label>
+        <select th:field="*{equipeId}">
+            <option value="">-- Nova Equipe --</option>
+            <option th:each="eq : ${equipes}" th:value="${eq.id}" th:text="${eq.nome}"></option>
+        </select>
+        
+        <label>Ou Criar Nova Equipe (Nome): <input type="text" th:field="*{novaEquipeNome}" /></label>
+        <label>Cidade: <input type="text" th:field="*{novaEquipeCidade}" /></label>
+
+        <button type="submit">Registrar</button>
+    </form>
+</body>
+</html>
