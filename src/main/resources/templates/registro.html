@@ -20,7 +20,11 @@
         <label>Escolher Equipe Existente:</label>
         <select th:field="*{equipeId}">
             <option value="">-- Nova Equipe --</option>
-            <option th:each="eq : ${equipes}" th:value="${eq.id}" th:text="${eq.nome}"></option>
+            
+            <th:block th:if="${equipes != null}">
+                <option th:each="eq : ${equipes}" th:value="${eq.id}" th:text="${eq.nome}"></option>
+            </th:block>
+            
         </select>
         
         <label>Ou Criar Nova Equipe (Nome): <input type="text" th:field="*{novaEquipeNome}" /></label>

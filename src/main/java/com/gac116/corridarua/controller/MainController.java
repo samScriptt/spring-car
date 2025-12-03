@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.ArrayList; // Importante para criar listas vazias
 
 @Controller
 @RequestMapping("/")
@@ -32,6 +33,9 @@ public class MainController {
     @GetMapping
     public String home(Model model) {
         List<Equipe> equipes = equipeRepository.findAll();
+        // Proteção: se vier nulo, cria lista vazia
+        if (equipes == null) equipes = new ArrayList<>();
+        
         model.addAttribute("equipes", equipes);
         model.addAttribute("titulo", "Bem-vindo ao CorridaRua!");
         return "home"; 
@@ -44,20 +48,34 @@ public class MainController {
 
     @GetMapping("/registro")
     public String registroForm(Model model) {
+        System.out.println("--- Acessando registro (GET) ---");
+        
         model.addAttribute("registroDto", new RegistroDTO());
-        model.addAttribute("equipes", equipeRepository.findAll());
+        
+        // --- PROTEÇÃO CONTRA LISTA NULA ---
+        List<Equipe> lista = null;
+        try {
+            lista = equipeRepository.findAll();
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar equipes: " + e.getMessage());
+        }
+
+        if (lista == null) {
+            lista = new ArrayList<>(); // Cria lista vazia para não dar erro no HTML
+            System.out.println("Aviso: Lista de equipes era nula, criada lista vazia.");
+        }
+        
+        model.addAttribute("equipes", lista);
         return "registro";
     }
 
     @PostMapping("/registro")
     public String registrarPiloto(@ModelAttribute RegistroDTO dto, Model model) {
         try {
-            // 1. Verificar se usuário já existe
             if (pilotoRepository.findByUsername(dto.getUsername()).isPresent()) {
                 throw new IllegalArgumentException("Este nome de usuário já está em uso!");
             }
 
-            // 2. Criar ou buscar Equipe
             Equipe equipe = null;
             if (dto.getEquipeId() != null) {
                 equipe = equipeRepository.findById(dto.getEquipeId()).orElse(null);
@@ -68,7 +86,6 @@ public class MainController {
                 equipeRepository.save(equipe);
             }
 
-            // 3. Criar Piloto
             Piloto novoPiloto = new Piloto();
             novoPiloto.setNome(dto.getNomePiloto());
             novoPiloto.setUsername(dto.getUsername());
@@ -80,10 +97,13 @@ public class MainController {
             return "redirect:/login?registrado=true";
 
         } catch (Exception e) {
-            // Se der erro, volta para o formulário e mostra a mensagem
-            model.addAttribute("erro", "Erro ao registrar: " + e.getMessage());
-            model.addAttribute("equipes", equipeRepository.findAll());
-            // Importante: devolve o DTO preenchido para o usuário não perder o que digitou
+            model.addAttribute("erro", "Erro: " + e.getMessage());
+            
+            // Recarrega lista com proteção também no erro
+            List<Equipe> lista = equipeRepository.findAll();
+            if (lista == null) lista = new ArrayList<>();
+            model.addAttribute("equipes", lista);
+            
             model.addAttribute("registroDto", dto); 
             return "registro";
         }
