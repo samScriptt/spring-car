@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>Registro - Corrida Rua</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
 </head>
-<body class="container">
+<body class="container" style="padding-top: 20px;">
     <h2>Registro de Piloto</h2>
+    
+    <div th:if="${erro}" style="background-color: #ffe6e6; color: #d63301; padding: 10px; margin-bottom: 20px; border-radius: 5px;">
+        <strong th:text="${erro}"></strong>
+    </div>
+
     <form th:action="@{/registro}" th:object="${registroDto}" method="post">
-        
         <label>Usuário: <input type="text" th:field="*{username}" required /></label>
         <label>Senha: <input type="password" th:field="*{password}" required /></label>
         <label>Nome Piloto: <input type="text" th:field="*{nomePiloto}" required /></label>
@@ -22,6 +27,7 @@
         <label>Cidade: <input type="text" th:field="*{novaEquipeCidade}" /></label>
 
         <button type="submit">Registrar</button>
+        <a href="/login" class="secondary">Voltar ao Login</a>
     </form>
 </body>
 </html>

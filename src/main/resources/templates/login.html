@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - Corrida Rua</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+<body class="container" style="padding-top: 50px; max-width: 600px;">
+    <article>
+        <header>
+            <h1>🔐 Login</h1>
+        </header>
+
+        <div th:if="${param.error}" style="color: red; margin-bottom: 10px;">
+            Usuário ou senha inválidos.
+        </div>
+        
+        <div th:if="${param.registrado}" style="color: green; margin-bottom: 10px;">
+            Registro realizado com sucesso! Faça login.
+        </div>
+        
+        <div th:if="${param.logout}" style="color: blue; margin-bottom: 10px;">
+            Você saiu do sistema.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <label for="username">Usuário
+                <input type="text" id="username" name="username" required autofocus>
+            </label>
+
+            <label for="password">Senha
+                <input type="password" id="password" name="password" required>
+            </label>
+
+            <button type="submit">Entrar</button>
+        </form>
+
+        <footer>
+            <small>Ainda não tem conta? <a th:href="@{/registro}">Registre-se aqui</a>.</small>
+            <br>
+            <small><a th:href="@{/}">Voltar para Home</a></small>
+        </footer>
+    </article>
+</body>
+</html>

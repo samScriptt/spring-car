@@ -13,25 +13,25 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher; // I
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // Usamos a sintaxe de expressão lambda (Spring Security 6+) para a configuração.
-        http
-            .authorizeHttpRequests(auth -> auth
-                // Acesso público usando a sintaxe de string (não precisa de AntPathRequestMatcher aqui)
-                .requestMatchers("/", "/login", "/registro").permitAll()
-                
-                // Permite acesso a recursos estáticos (CSS, JS, etc.)
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                
-                // Todas as outras requisições devem ser autenticadas
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/", true) // Redireciona para a home após o login
-                .permitAll()
-            )
+   // ... imports
+
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .authorizeHttpRequests(auth -> auth
+            // Adicione "/error" aqui para que erros não redirecionem para login
+            .requestMatchers("/", "/login", "/registro", "/error").permitAll()
+            
+            // Seus estáticos
+            .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+            
+            .anyRequest().authenticated()
+        )
+        .formLogin(form -> form
+            .loginPage("/login")
+            .defaultSuccessUrl("/", true)
+            .permitAll()
+        )
             .logout(logout -> logout
                 // Aqui usamos o AntPathRequestMatcher para definir explicitamente o URL de logout.
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) 
